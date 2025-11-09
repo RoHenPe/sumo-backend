@@ -1,19 +1,13 @@
-# 1. Usar a imagem "main" que você acabou de baixar
-FROM ghcr.io/eclipse-sumo/sumo:main
+FROM eclipse/sumo:latest
 
-# 2. Definir o diretório de trabalho
+RUN apt-get update && apt-get install -y python3 python3-pip
+
 WORKDIR /app
 
-# 3. Instalar as bibliotecas Python
-RUN pip install --no-cache-dir --upgrade pip
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 4. Copiar seu código da API
 COPY . .
 
-# 5. Expor a porta interna da API
-EXPOSE 8000
+RUN pip3 install -r requirements.txt
 
-# 6. Comando para iniciar a API Python
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 5000
+
+CMD ["python3", "main.py"]
