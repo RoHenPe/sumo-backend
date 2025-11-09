@@ -1,0 +1,26 @@
+services:
+  sumo_local:
+    image: ghcr.io/eclipse-sumo/sumo:v1_24_0
+    container_name: sumo_local
+    ports:
+      - "8598:8080"
+    command: ["python3", "/usr/share/sumo/tools/osmWebWizard.py", "--port", "8080"]
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  sumo_api:
+    container_name: sumo_api
+    build:
+      context: ./sumo-backend
+    ports:
+      - "8599:8000"
+    env_file:
+      - ./.env.docker
+    
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2g
